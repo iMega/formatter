@@ -1,0 +1,24 @@
+{
+  "name": "iMega/Formatter",
+  "description": "Data formatter for mapper",
+  "keywords": ["mapper", "data", "transform", "format"],
+  "homepage": "https://github.com/iMega/formatter",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dmitry Gavriloff",
+      "email": "info@imega.ru",
+      "homepage": "http://imega.ru"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "autoload": {
+    "psr-4": {"iMega\\Formatter\\": "src/iMega/Formatter"}
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.6"
+  }
+}
