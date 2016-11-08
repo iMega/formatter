@@ -56,6 +56,12 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
                 ],
                 'expected' => new FormatterException('Wrong type'),
             ],
+            [
+                'data' => [
+                    ['name', 'defaultValue', '\\Exception', 0],
+                ],
+                'expected' => new FormatterException('Wrong instance'),
+            ],
         ];
     }
 
@@ -69,8 +75,12 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
     public function testGetData(array $data, $name, $value, $expected)
     {
         $formatter = new Formatter($data);
-        $actual = $formatter->getData($name, $value);
-        $this->assertSame($expected, $actual);
+        try {
+            $actual = $formatter->getData($name, $value);
+            $this->assertSame($expected, $actual);
+        } catch (FormatterException $e) {
+            $this->assertEquals($expected, $e);
+        }
     }
 
     /**
@@ -113,6 +123,16 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
                 'name' => 'my_date',
                 'value' => 'WRONG DATE',
                 'expected' => '2016-11-08 10:25:00',
+            ],
+            [
+                'data' => [
+                    JsonType::setDefault('my_json', []),
+                ],
+                'name' => 'my_json_other',
+                'value' => [
+                    'foo' => 'bar',
+                ],
+                'expected' => new FormatterException('Field not exists'),
             ],
         ];
     }
