@@ -8,7 +8,7 @@ class JsonType extends GenericType
     {
         $result = json_encode($value);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException(json_last_error_msg());
+            throw new FormatterException(json_last_error_msg());
         }
 
         return $result;
@@ -18,7 +18,7 @@ class JsonType extends GenericType
     {
         $result = json_decode($value, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException(json_last_error_msg());
+            throw new FormatterException(json_last_error_msg());
         }
 
         return $result;

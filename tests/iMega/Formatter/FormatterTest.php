@@ -14,8 +14,8 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
         try {
             $actual = new Formatter($data);
             $this->assertInstanceOf($expected, $actual);
-        } catch (\Exception $e) {
-            $this->assertSame($expected, $e->getMessage());
+        } catch (FormatterException $e) {
+            $this->assertEquals($expected, $e);
         }
     }
 
@@ -36,25 +36,25 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
                 'data' => [
                     IntType::setDefault('int-type', 10),
                 ],
-                'expected' => 'Wrong field name',
+                'expected' => new FormatterException('Wrong field name'),
             ],
             [
                 'data' => [
                     IntType::setDefault('intType', 10),
                 ],
-                'expected' => 'Wrong field name',
+                'expected' => new FormatterException('Wrong field name'),
             ],
             [
                 'data' => [
                     [],
                 ],
-                'expected' => 'Wrong type',
+                'expected' => new FormatterException('Wrong type'),
             ],
             [
                 'data' => [
                     'blah-blah-blah',
                 ],
-                'expected' => 'Wrong type',
+                'expected' => new FormatterException('Wrong type'),
             ],
         ];
     }
@@ -70,7 +70,6 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
     {
         $formatter = new Formatter($data);
         $actual = $formatter->getData($name, $value);
-
         $this->assertSame($expected, $actual);
     }
 
@@ -107,6 +106,14 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
                 ],
                 'expected' => '{"foo":"bar"}',
             ],
+            [
+                'data' => [
+                    DateTimeType::setDefault('my_date', date_create_from_format('Y-m-d H:i:s', '2016-11-08 10:25:00'))
+                ],
+                'name' => 'my_date',
+                'value' => 'WRONG DATE',
+                'expected' => '2016-11-08 10:25:00',
+            ],
         ];
     }
 
@@ -121,8 +128,7 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
     {
         $formatter = new Formatter($data);
         $actual = $formatter->getValue($name, $value);
-
-        $this->assertSame($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -156,6 +162,55 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
                 'value' => '{"foo":"bar"}',
                 'expected' => [
                     'foo' => 'bar',
+                ],
+            ],
+            [
+                'data' => [
+                    DateTimeType::setDefault('my_date', date_create_from_format('Y-m-d H:i:s', '2016-11-08 10:25:00'))
+                ],
+                'name' => 'my_date',
+                'value' => 'WRONG DateTime',
+                'expected' => date_create_from_format('Y-m-d H:i:s', '2016-11-08 10:25:00'),
+            ],
+        ];
+    }
+
+    /**
+     * @param $data
+     * @param $values
+     * @param $expected
+     * @dataProvider getDataCollectionDataProvider
+     */
+    public function testGetDataCollection($data, $values, $expected)
+    {
+        $formatter = new Formatter($data);
+        $actual = $formatter->getDataCollection($values);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @see testGetDataCollection
+     * @return array
+     */
+    public function getDataCollectionDataProvider()
+    {
+        return [
+            [
+                'data' => [
+                    IntType::setDefault('my_int', 1),
+                    JsonType::setDefault('my_json', []),
+                    BoolType::setDefault('my_bool', false),
+                ],
+                'values' => [
+                    'my_int' => 10,
+                    'my_json' => [
+                        'foo' => 'bar',
+                    ],
+                ],
+                'expected' => [
+                    'my_int' => 10,
+                    'my_json' => '{"foo":"bar"}',
+                    'my_bool' => 0,
                 ],
             ],
         ];

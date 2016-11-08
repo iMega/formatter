@@ -14,7 +14,7 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
         try {
             $actual = ArrayType::getData($data);
             $this->assertSame($expected, $actual);
-        } catch (\Exception $e) {
+        } catch (FormatterException $e) {
             $this->assertEquals($expected, $e);
         }
     }
@@ -34,7 +34,7 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'data' => 'It not array',
-                'expected' => new \RuntimeException('It not array'),
+                'expected' => new FormatterException('It not array'),
             ],
         ];
     }
@@ -49,7 +49,7 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
         try {
             $actual = ArrayType::getValue($data);
             $this->assertSame($expected, $actual);
-        } catch (\Exception $e) {
+        } catch (FormatterException $e) {
             $this->assertEquals($expected, $e);
         }
     }
@@ -69,7 +69,7 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'data' => 'a:1:{s:3:"foo";s:3:".....WRONG....',
-                'expected' => new \RuntimeException('String not unserialize'),
+                'expected' => new FormatterException('String not unserialize'),
             ],
         ];
     }

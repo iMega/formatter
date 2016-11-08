@@ -14,7 +14,7 @@ class DateTimeTypeTest extends \PHPUnit_Framework_TestCase
         try {
             $actual = DateTimeType::getData($data);
             $this->assertSame($expected, $actual);
-        } catch (\Exception $e) {
+        } catch (FormatterException $e) {
             $this->assertEquals($expected, $e);
         }
     }
@@ -32,7 +32,7 @@ class DateTimeTypeTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'data' => 'It not datetime',
-                'expected' => new \RuntimeException('It not DateTime'),
+                'expected' => new FormatterException('It not DateTime'),
             ],
         ];
     }
@@ -47,7 +47,7 @@ class DateTimeTypeTest extends \PHPUnit_Framework_TestCase
         try {
             $actual = DateTimeType::getValue($data);
             $this->assertEquals($expected, $actual);
-        } catch (\Exception $e) {
+        } catch (FormatterException $e) {
             $this->assertEquals($expected, $e);
         }
     }
@@ -65,7 +65,7 @@ class DateTimeTypeTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'data' => 'WRONG DateTime',
-                'expected' => new \RuntimeException('String not convert'),
+                'expected' => new FormatterException('String not convert'),
             ],
         ];
     }

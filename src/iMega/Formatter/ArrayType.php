@@ -7,7 +7,7 @@ class ArrayType extends GenericType
     public static function getData($value)
     {
         if (!is_array($value)) {
-            throw new \RuntimeException('It not array');
+            throw new FormatterException('It not array');
         }
 
         return serialize($value);
@@ -16,7 +16,7 @@ class ArrayType extends GenericType
     public static function getValue($value)
     {
         if (false === $res = @unserialize($value)) {
-            throw new \RuntimeException('String not unserialize');
+            throw new FormatterException('String not unserialize');
         }
 
         return $res;
