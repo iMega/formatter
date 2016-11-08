@@ -2,7 +2,7 @@
 
 namespace iMega\Formatter;
 
-class ArrayTypeTest extends \PHPUnit_Framework_TestCase
+class DateTimeTypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param $data
@@ -12,7 +12,7 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
     public function testGetData($data, $expected)
     {
         try {
-            $actual = ArrayType::getData($data);
+            $actual = DateTimeType::getData($data);
             $this->assertSame($expected, $actual);
         } catch (\Exception $e) {
             $this->assertEquals($expected, $e);
@@ -27,14 +27,12 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'data' => [
-                    'foo' => 'bar',
-                ],
-                'expected' => 'a:1:{s:3:"foo";s:3:"bar";}',
+                'data' => date_create_from_format('Y-m-d H:i:s', '2016-11-08 10:25:00'),
+                'expected' => '2016-11-08 10:25:00',
             ],
             [
-                'data' => 'It not array',
-                'expected' => new \RuntimeException('It not array'),
+                'data' => 'It not datetime',
+                'expected' => new \RuntimeException('It not DateTime'),
             ],
         ];
     }
@@ -47,8 +45,8 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
     public function testGetValue($data, $expected)
     {
         try {
-            $actual = ArrayType::getValue($data);
-            $this->assertSame($expected, $actual);
+            $actual = DateTimeType::getValue($data);
+            $this->assertEquals($expected, $actual);
         } catch (\Exception $e) {
             $this->assertEquals($expected, $e);
         }
@@ -62,14 +60,12 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'data' => 'a:1:{s:3:"foo";s:3:"bar";}',
-                'expected' => [
-                    'foo' => 'bar',
-                ],
+                'data' => '2016-11-08 10:25:00',
+                'expected' => date_create_from_format('Y-m-d H:i:s', '2016-11-08 10:25:00'),
             ],
             [
-                'data' => 'a:1:{s:3:"foo";s:3:".....WRONG....',
-                'expected' => new \RuntimeException('String not unserialize'),
+                'data' => 'WRONG DateTime',
+                'expected' => new \RuntimeException('String not convert'),
             ],
         ];
     }
