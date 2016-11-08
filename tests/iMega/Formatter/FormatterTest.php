@@ -215,4 +215,45 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
+
+    /**
+     * @param $data
+     * @param $values
+     * @param $expected
+     * @dataProvider getValueCollectionDataProvider
+     */
+    public function testGetValueCollection($data, $values, $expected)
+    {
+        $formatter = new Formatter($data);
+        $actual = $formatter->getValueCollection($values);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @see testGetValueCollection
+     * @return array
+     */
+    public function getValueCollectionDataProvider()
+    {
+        return [
+            [
+                'data' => [
+                    IntType::setDefault('my_int', 1),
+                    JsonType::setDefault('my_json', []),
+                    BoolType::setDefault('my_bool', false),
+                ],
+                'values' => [
+                    'my_int' => 10,
+                    'my_json' => '{"foo":"bar"}',
+                ],
+                'expected' => [
+                    'my_int' => 10,
+                    'my_json' => [
+                        'foo' => 'bar',
+                    ],
+                    'my_bool' => false,
+                ],
+            ],
+        ];
+    }
 }
