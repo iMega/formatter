@@ -47,7 +47,7 @@ class Formatter
     public function getDataCollection(array $values)
     {
         $ret = [];
-        foreach ($this->getFileds() as $name => $v) {
+        foreach ($this->getFileds() as $name) {
             if (array_key_exists($name, $values)) {
                 $ret[$name] = $this->getData($name, $values[$name]);
             } else {
@@ -62,7 +62,7 @@ class Formatter
     public function getValueCollection(array $values)
     {
         $ret = [];
-        foreach ($this->getFileds() as $name => $v) {
+        foreach ($this->getFileds() as $name) {
             if (array_key_exists($name, $values)) {
                 $ret[$name] = $this->getValue($name, $values[$name]);
             } else {
@@ -78,7 +78,7 @@ class Formatter
      */
     public function getFileds()
     {
-        return $this->fields;
+        return array_keys($this->fields);
     }
 
     /**
