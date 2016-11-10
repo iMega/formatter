@@ -2,12 +2,6 @@
 
 namespace iMega\Formatter;
 
-interface Typer
-{
-    public static function getData($value);
-    public static function getValue($value);
-}
-
 abstract class GenericType implements Typer
 {
     private function __construct() {}
